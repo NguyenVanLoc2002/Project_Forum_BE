@@ -1,10 +1,12 @@
 package com.fit.backend.models;
 
+import com.fit.backend.enums.Gender;
 import com.fit.backend.enums.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class User {
     private String username;
     private String email;
     private String password; // Hashed password
+    private LocalDate dayOfBirth;
+    private Gender gender;
 
     private Role role;
     private boolean isActive;
