@@ -7,6 +7,7 @@ import com.fit.backend.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,21 +27,23 @@ public class AuthController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verify(@RequestParam String token) {
+    public RedirectView verify(@RequestParam String token) {
         try {
-            String response = authService.verifyAccount(token);
-            return ResponseEntity.ok("Chuyển hướng đến trang cập nhật mật khẩu");
+            authService.verifyAccount(token); // Xác thực tài khoản
+
+            // Chuyển hướng về trang chủ + báo hiệu mở modal đổi mật khẩu
+            return new RedirectView("http://localhost:3000/?openChangePassword=true&token=" + token);
         } catch (JsonProcessingException e) {
-            return ResponseEntity.status(500).body("Lỗi khi xác thực tài khoản: " + e.getMessage());
+            return new RedirectView("http://localhost:3000/error?message=Lỗi khi xác thực tài khoản");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return new RedirectView("http://localhost:3000/error?message=" + e.getMessage());
         }
     }
 
     @PostMapping("/update-password")
-    public ResponseEntity<User> updatePassword(@RequestParam String token, @RequestBody String password) {
+    public ResponseEntity<User> updatePassword(@RequestParam String resetToken, @RequestBody String password) {
         try {
-            User user = authService.updatePassword(token, password);
+            User user = authService.updatePassword(resetToken, password);
             return ResponseEntity.ok(user);
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(500).body(null);

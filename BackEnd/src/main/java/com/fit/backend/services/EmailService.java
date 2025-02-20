@@ -40,10 +40,10 @@ public class EmailService {
             String htmlContent = loadVerifyEmailTemplate();
             htmlContent = htmlContent.replace("${username}", userRegistrationDTO.getUsername());
             htmlContent = htmlContent.replace("${email}", userRegistrationDTO.getEmail());
-            htmlContent = htmlContent.replace("${verificationLink}", token);
+            htmlContent = htmlContent.replace("${token}", token);
 
             // Tạo đối tượng Email và gửi
-            Email emailDetails = new Email(userRegistrationDTO.getEmail(), htmlContent, "Xác nhận đặt tour", "");
+            Email emailDetails = new Email(userRegistrationDTO.getEmail(), htmlContent, "Xác thực tài khoản", "");
             sendVerifyEmail(emailDetails);
         } catch (Exception e) {
             log.error("Lỗi khi gửi email xác thực: {}", e.getMessage());

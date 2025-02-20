@@ -30,6 +30,8 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-core'
     implementation 'io.jsonwebtoken:jjwt:0.12.6'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

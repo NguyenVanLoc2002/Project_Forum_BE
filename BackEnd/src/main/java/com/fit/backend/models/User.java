@@ -23,7 +23,7 @@ public class User {
     private String username;
     private String email;
     private String password; // Hashed password
-    private LocalDate dayOfBirth;
+    private Date dayOfBirth;
     private Gender gender;
 
     private Role role;

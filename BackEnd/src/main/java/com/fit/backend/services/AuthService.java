@@ -7,10 +7,10 @@ import com.fit.backend.models.User;
 import com.fit.backend.repositories.UserRepository;
 import com.fit.backend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -23,6 +23,8 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public String register(UserRegistrationDTO dto) throws JsonProcessingException {
         // Tạo JWT chứa thông tin người dùng
@@ -45,15 +47,16 @@ public class AuthService {
         throw new IllegalArgumentException("Token không hợp lệ");
     }
 
-    public User updatePassword(String token, String password) throws JsonProcessingException {
+    public User updatePassword(String token, String newPassword) throws JsonProcessingException {
         UserRegistrationDTO dto = jwtUtil.extractUserInfo(token);
         if (dto == null) {
             throw new IllegalArgumentException("Token không hợp lệ");
         }
-
+        String hashedPassword = passwordEncoder.encode(newPassword);
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
+        user.setPassword(hashedPassword);
         user.setDayOfBirth(dto.getDayOfBirth());
         user.setGender(Gender.valueOf(dto.getGender().toUpperCase())); // Chắc chắn đúng enum
         user.setActive(true);
